@@ -21,6 +21,10 @@ public:
 private slots:
     void SaveImage();
 
+    void on_horizontalSlider_valueChanged(int value);
+
+    void on_pushButton_released();
+
 private:
     Ui::DrawPictureWindow *ui;
     MouseScene *scene;

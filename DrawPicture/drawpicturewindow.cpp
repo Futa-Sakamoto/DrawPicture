@@ -8,9 +8,10 @@ DrawPictureWindow::DrawPictureWindow(QWidget *parent)
 {
     ui->setupUi(this);
     scene = new MouseScene;
-    ui->graphicsView->setScene(scene);
-    connect(ui->horizontalSlider,SIGNAL(valueChanged(int)),this,SLOT(sliderMoved()));
+    ui->graphicsView->setScene(scene);  //キャンバスに線を引けるようにする。
     ui->horizontalSlider->setRange(1,100);
+
+    setAcceptDrops(true);
 }
 
 DrawPictureWindow::~DrawPictureWindow()
@@ -23,3 +24,27 @@ void DrawPictureWindow::SaveImage()
     QPixmap(ui->graphicsView->grab()).save(QFileDialog::getSaveFileName());
 }
 
+
+void DrawPictureWindow::on_horizontalSlider_valueChanged(int value)
+{
+    QPen oQpen;
+
+    // 現在のペンを取得
+    oQpen = scene -> GetPen();
+
+    // ペンの太さ変更
+    oQpen.setWidth(value);
+    scene -> SetPen(oQpen);
+}
+
+void DrawPictureWindow::on_pushButton_released()
+{
+    bool bSelectOn = scene -> GetSelectOn();
+
+    if (bSelectOn == true) {
+        bSelectOn = false;
+    } else {
+        bSelectOn = true;
+    }
+    scene -> SetSelectOn(bSelectOn);
+}
